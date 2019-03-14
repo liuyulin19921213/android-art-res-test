@@ -169,5 +169,15 @@ public class BookManagerImpl extends Binder implements IBookManager3 {
                 _data.recycle();
             }
         }
+
+        @Override
+        public void registerLisenter(IOnNewBookArrivedListener listener) throws RemoteException {
+
+        }
+
+        @Override
+        public void unregisterListener(IOnNewBookArrivedListener listener) throws RemoteException {
+
+        }
     }
 }

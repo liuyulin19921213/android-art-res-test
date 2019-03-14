@@ -3,6 +3,9 @@
  * Original file: /media/lyl/liuyulin/LYL/DaiMa/AndroidStudio/android-art-res-master/atest_chapter_2/src/main/java/com/lyl/chapter_2_test/aidl/IBookManager.aidl
  */
 package com.lyl.chapter_2_test.aidl;
+
+import android.os.RemoteException;
+
 public interface IBookManager2 extends android.os.IInterface
 {
 
@@ -89,6 +92,24 @@ public interface IBookManager2 extends android.os.IInterface
                     reply.writeNoException();
                     return true;
                 }
+                case TRANSACTION_registerLisenter:
+                {
+                    data.enforceInterface(descriptor);
+                    com.lyl.chapter_2_test.aidl.IOnNewBookArrivedListener _arg0;
+                    _arg0 = com.lyl.chapter_2_test.aidl.IOnNewBookArrivedListener.Stub.asInterface(data.readStrongBinder());
+                    this.registerLisenter(_arg0);
+                    reply.writeNoException();
+                    return true;
+                }
+                case TRANSACTION_unregisterListener:
+                {
+                    data.enforceInterface(descriptor);
+                    com.lyl.chapter_2_test.aidl.IOnNewBookArrivedListener _arg0;
+                    _arg0 = com.lyl.chapter_2_test.aidl.IOnNewBookArrivedListener.Stub.asInterface(data.readStrongBinder());
+                    this.unregisterListener(_arg0);
+                    reply.writeNoException();
+                    return true;
+                }
                 default:
                 {
                     return super.onTransact(code, data, reply, flags);
@@ -163,6 +184,38 @@ public interface IBookManager2 extends android.os.IInterface
                     _data.recycle();
                 }
             }
+
+            @Override
+            public void registerLisenter(IOnNewBookArrivedListener listener) throws RemoteException {
+                android.os.Parcel _data = android.os.Parcel.obtain();
+                android.os.Parcel _reply = android.os.Parcel.obtain();
+                try {
+                    _data.writeInterfaceToken(DESCRIPTOR);
+                    _data.writeStrongBinder((((listener!=null))?(listener.asBinder()):(null)));
+                    mRemote.transact(Stub.TRANSACTION_registerLisenter, _data, _reply, 0);
+                    _reply.readException();
+                }
+                finally {
+                    _reply.recycle();
+                    _data.recycle();
+                }
+            }
+
+            @Override
+            public void unregisterListener(IOnNewBookArrivedListener listener) throws RemoteException {
+                android.os.Parcel _data = android.os.Parcel.obtain();
+                android.os.Parcel _reply = android.os.Parcel.obtain();
+                try {
+                    _data.writeInterfaceToken(DESCRIPTOR);
+                    _data.writeStrongBinder((((listener!=null))?(listener.asBinder()):(null)));
+                    mRemote.transact(Stub.TRANSACTION_unregisterListener, _data, _reply, 0);
+                    _reply.readException();
+                }
+                finally {
+                    _reply.recycle();
+                    _data.recycle();
+                }
+            }
         }
 
         /**
@@ -171,10 +224,15 @@ public interface IBookManager2 extends android.os.IInterface
          */
         static final int TRANSACTION_getBookList = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
         static final int TRANSACTION_addBook = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
+        static final int TRANSACTION_registerLisenter = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
+        static final int TRANSACTION_unregisterListener = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
     }
 
 
     //声明了两个方法，显然是我们在IBookManager.aidl 中所声明的方法
     public java.util.List<Book> getBookList() throws android.os.RemoteException;
     public void addBook(Book book) throws android.os.RemoteException;
+    public void registerLisenter(com.lyl.chapter_2_test.aidl.IOnNewBookArrivedListener listener) throws android.os.RemoteException;
+    public void unregisterListener(com.lyl.chapter_2_test.aidl.IOnNewBookArrivedListener listener) throws android.os.RemoteException;
+
 }

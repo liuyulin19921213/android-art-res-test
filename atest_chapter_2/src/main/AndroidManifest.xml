@@ -17,11 +17,7 @@
         tools:ignore="GoogleAppIndexingWarning"
         >
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
         <activity android:name=".SecondActivity"
@@ -34,6 +30,27 @@
                   android:process="com.lyl.chapter_2_test.remote"
             />
 
+        <activity android:name=".messenger.MessengerActivity">
+
+
+        </activity>
+
+        <service android:name=".messenger.MessengerService"
+            android:process=":remoto_messenger"
+            />
+
+        <service android:name=".aidl.BookManagerService"
+            android:process=":remoto"
+            />
+
+        <activity android:name=".aidl.BookManagerActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

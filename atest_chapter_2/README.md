@@ -44,6 +44,8 @@ Binder方式来跨进程通信
 ContentProvider天生就是支持跨进程访问的，
 通过网络通信也是可以实现数据传递的，Socket也可以实现IPC 
 
+##跨进程传输方式详解
+
 Intent 传递Bundle 这是最简单的进程间通信方式
 
 曲线救国方案，A需要计算一个结果不支持用Bundle 之后传递给进程B并启动B中组件
@@ -58,4 +60,26 @@ SharedPreferences 属于特殊的文件的一种，由于系统对它的读写�
 使用 Messenger 注意 Message 通过Messenger 可以在不同进程传递Message 对象，
 在Message中放我们需要的对象，Messenger是一种轻量级的IPC方案，底层用AIDL
 Messenger一次只处理一个请求，在服务端我们不用考虑线程同步的问题，服务端不存在并发的情形。
+Messenger 是串行的方式处理客户端发来的消息，如果有大量的并发请求不适合用，
+Messenger 是用来传递消息，有时候可能需要跨进程调用服务端的方法，这时候就无法实现
+
+使用AIDL
+
+
+AIDL 支持的数据结构
+。。。
+List 只支持ArrayList
+Map 只支持HashMap
+
+不支持声明静态常量
+
+调用另一个程序的service 另一个程序的 service 属性需要添加
+android:exported="true"
+
+AIDL 中能够使用List 只有ArrayList 但我们使用了CopyOnWriteArrayList
+AIDL 中所支持的是抽象的List 而List只是一个接口，因此瑞然服务端返回的是CopyOnWriteArrayList
+但是在Binder中会按照List 的规范去访问数据并最终形成一个新的ArrayList 传递给客户端，
+类似的还有ConcurrentHashMap
+
+
 

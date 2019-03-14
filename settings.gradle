@@ -1,1 +1,1 @@
-include ':atest_chapter_2'
+include ':atest_chapter_2', ':atest_chapter_2_2'
