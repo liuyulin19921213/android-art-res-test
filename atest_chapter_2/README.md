@@ -108,7 +108,10 @@ permission验证，具体和第一种方法一样。
 细节还是相当多，比如 CRUD 操作、防止 SQL 注入和权限控制等 
 android:authorities 是 ContentProvide 的唯一标识 
 android:permission 申请权限时候需要动态权限
-onCreat 在主线程，不可做耗时操作
+onCreate 在主线程，不可做耗时操作
+ContentProvider 根据URL 来区分外界要访问的数据集合，
+
+## socket
 
 
 

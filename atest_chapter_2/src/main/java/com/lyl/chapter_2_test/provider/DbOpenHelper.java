@@ -22,8 +22,8 @@ public class DbOpenHelper extends SQLiteOpenHelper {
     private  String CREATE_BOOK_TABLE = "CREATE TABLE IF NOT EXISTS "
             + BOOK_TABLE_NAME + "(_id INTEGER PRIMARY KEY," + "name TEXT)";
 
-    private String CREATE_USER_TABLE = "CREATE TABLE IF NOT EXISTS"
-            + USER_TALBE_NAME + "(_id INTEGER PRIMARY KEY," +"nae TEXT,"+
+    private String CREATE_USER_TABLE = "CREATE TABLE IF NOT EXISTS "
+            + USER_TALBE_NAME + "(_id INTEGER PRIMARY KEY," + "name TEXT,"+
             "sex INT)";
 
     public DbOpenHelper(Context context) {
