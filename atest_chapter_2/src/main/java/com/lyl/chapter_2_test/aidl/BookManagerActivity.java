@@ -50,6 +50,7 @@ public class BookManagerActivity extends AppCompatActivity {
             IBookManager bookManager = IBookManager.Stub.asInterface(service);
 
             try {
+                mRemotoBookManager = bookManager;
                 List<Book> list = bookManager.getBookList();
                 //虽然我们用了 CopyOnWriteArrayList 但是接收的还是 type:java.util.ArrayList
                 Log.i(TAG,"query book list,list type:" + list.getClass().getCanonicalName());
@@ -60,6 +61,7 @@ public class BookManagerActivity extends AppCompatActivity {
                 Log.i(TAG,"add book:" + book);
                 List<Book> newlist = bookManager.getBookList();
                 Log.i(TAG,"query book list " + newlist.toString());
+                bookManager.registerLisenter(mIonIOnNewBookArrivedListener);
 
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -69,9 +71,18 @@ public class BookManagerActivity extends AppCompatActivity {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-
+            mRemotoBookManager =null;
+            Log.d(TAG,"binder diel.");
         }
     };
+
+    private IOnNewBookArrivedListener mIonIOnNewBookArrivedListener =
+            new IOnNewBookArrivedListener.Stub() {
+                @Override
+                public void onNewBookArrived(Book newBook) throws RemoteException {
+                    mHandler.obtainMessage(MESSAGE_NEW_BOOK_ARRIVED,newBook).sendToTarget();
+                }
+            };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,6 +95,15 @@ public class BookManagerActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        if (mRemotoBookManager != null && mRemotoBookManager.asBinder().isBinderAlive()){
+
+            try {
+                Log.i(TAG,"unregister listener:"+ mIonIOnNewBookArrivedListener);
+                mRemotoBookManager.unregisterListener(mIonIOnNewBookArrivedListener);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
         unbindService(mConnection);
         super.onDestroy();
     }

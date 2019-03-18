@@ -81,5 +81,34 @@ AIDL 中所支持的是抽象的List 而List只是一个接口，因此瑞然服
 但是在Binder中会按照List 的规范去访问数据并最终形成一个新的ArrayList 传递给客户端，
 类似的还有ConcurrentHashMap
 
+RemoteCallbackList 系统专门提供用于删除跨进程listener 的接口
+工作原理，它内部有一个Map结构专门用来保存所有的AIDL回调，
+这个Map的key是Ibinder类型，value是Callback类型，
+虽然跨进程传输都是新的对象，但是新对象的底层的binder对象是同一个，
+所以只徐啊哟找到与注册listener 有相同的Binder对象的listener并删除就可以了
+还有他当客户端进程终止后，自动移除客户端所注册的listener，
+内部也实现了线程同步功能，不需要做线程同步工作
+
+Binder 是可能意外死亡的，这往往是由于服务端进程意外停止了，这时我们需要重新链接服务。
+第一种 是给 Binder 设置 DeathRecipient 监听，当 Binder 死亡，我们会收到 binderDied
+方法的回调，在 binderDied 方法中我们可以重连远程服务，具体方法在Binder 那一节已经介绍过了，
+另一种方法是在 onServiceDisconnected 中重连远程服务，
+区别在于： onServiceDisconnected 在客户端的UI线程中被回调，而binderDied 在客户端Binder
+线程池中被回调，
+
+AIDL 中使用权限验证功能，常用的两种方法
+第一种：在onBind中进行验证，验证不通过直接返回null，这样验证失败的客户端直接无法绑定服务，
+至于验证方式可以有多种，比如使用permission 验证，我们要先在androidMenifest 中声明所需的权限
+第二种：我们可以在服务端的onTransact 方法中进行权限验证，如果验证失败就直接返回false
+这样服务器就不会终止执行AIDL 中的方法从而达到保护服务端的效果，至于具体的验证方式有很多，可以采用
+permission验证，具体和第一种方法一样。
+还可以采用UID 和Pid 来做验证，
+
+## ContentProvider 
+细节还是相当多，比如 CRUD 操作、防止 SQL 注入和权限控制等 
+android:authorities 是 ContentProvide 的唯一标识 
+android:permission 申请权限时候需要动态权限
+onCreat 在主线程，不可做耗时操作
+
 
 

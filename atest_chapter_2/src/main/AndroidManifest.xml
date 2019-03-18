@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
+    <permission android:name="com.lyl.chapter_2_test.permission.ACCESS.BOOK.SERVICE"
+        android:protectionLevel="normal"
+        />
+
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
@@ -51,6 +55,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+       <!-- android:permission="com.lyl.PROVIDER"-->
+        <provider
+            android:authorities="com.lyl.chapter_2_test.provider"
+            android:name=".provider.BookProvider"
+
+            android:process=":provider"
+            android:exported="true"
+            />
     </application>
 
 </manifest>
